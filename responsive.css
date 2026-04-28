@@ -1,0 +1,92 @@
+/* Media Queries cho Điện thoại và Tablet */
+@media screen and (max-width: 768px) {
+    /* Navbar Responsive */
+    .navbar {
+        flex-direction: column;
+        padding: 10px 15px;
+        gap: 12px;
+    }
+    
+    .logo {
+        font-size: 24px;
+    }
+
+    .nav-links {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .nav-links li a {
+        font-size: 14px;
+    }
+
+    /* Hero Text Responsive (Tiêu đề và mô tả) */
+    .hero-text {
+        top: 15%; /* Đẩy lên cao để không che lấp Drone */
+        left: 0;
+        width: 100%;
+        text-align: center;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+
+    .hero-text h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-text p {
+        font-size: 1rem;
+        margin: 0 auto;
+    }
+
+    /* Bảng điều khiển Drone */
+    #ui-panel {
+        width: 90%;
+        min-width: auto;
+        padding: 15px 20px;
+        margin-bottom: 25px;
+    }
+
+    #ui-panel h3 {
+        font-size: 1.2rem;
+    }
+
+    #ui-panel button {
+        padding: 10px 15px;
+        font-size: 15px;
+    }
+
+    /* Nội dung các section khác */
+    .content-section {
+        padding: 60px 15px 20px;
+    }
+
+    .content-section h2 {
+        font-size: 2rem;
+    }
+
+    .content-section p {
+        font-size: 1rem;
+        padding: 0 10px;
+    }
+}
+
+/* Responsive cho thiết bị màn hình rất nhỏ (nhỏ hơn 480px) */
+@media screen and (max-width: 480px) {
+    .hero-text {
+        top: 18%; /* Giữ một khoảng cách vừa phải */
+    }
+
+    .hero-text h1 {
+        font-size: 1.8rem;
+    }
+
+    .nav-links {
+        gap: 10px;
+    }
+
+    .nav-links li a {
+        font-size: 13px;
+    }
+}
