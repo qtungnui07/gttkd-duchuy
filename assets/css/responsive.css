@@ -133,6 +133,46 @@
         font-size: 1rem;
         padding: 0 10px;
     }
+    /* Form Đặt Lịch Responsive */
+    .booking-wrapper {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .booking-headline {
+        font-size: 2.6rem;
+    }
+
+    .booking-info {
+        padding: 20px 0 0;
+    }
+
+    .booking-stats {
+        gap: 12px;
+        padding: 18px;
+    }
+
+    .stat-number {
+        font-size: 1.6rem;
+    }
+
+    .booking-form-panel {
+        padding: 28px 22px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .role-toggle-wrap {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .role-toggle {
+        width: 100%;
+    }
 }
 
 /* Responsive cho thiết bị màn hình rất nhỏ (nhỏ hơn 480px) */

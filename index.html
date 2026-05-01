@@ -25,6 +25,7 @@
                     <li><a href="#ve-vdrone">Về VDrone</a></li>
                     <li><a href="#dich-vu">Dịch vụ</a></li>
                     <li><a href="#cong-nghe">Công nghệ</a></li>
+                    <li><a href="#dat-lich">Đặt lịch</a></li>
                 </ul>
             </nav>
 
@@ -75,6 +76,120 @@
     <section id="cong-nghe" class="content-section">
         <h2>Công Nghệ Lõi</h2>
         <p>Dòng máy bay VDR-1 được trang bị hệ thống Radar/Lidar quét 360 độ, camera hành trình sắc nét và trí tuệ nhân tạo (AI) giúp tránh vật cản tự động. Hệ thống khung gầm hợp kim siêu nhẹ cùng cơ chế tháo lắp pin (hot-swap) giúp tối ưu thời gian hoạt động trạm bay.</p>
+    </section>
+
+    <section id="dat-lich">
+        <div class="booking-bg-glow"></div>
+        <div class="booking-wrapper">
+            <!-- Left panel: info -->
+            <div class="booking-info">
+                <div class="booking-badge">✦ VDR-1 DISPATCH</div>
+                <h2 class="booking-headline">Đặt Lịch<br><span>Giao Hàng</span></h2>
+                <p class="booking-desc">Bỏ qua kẹt xe. Bay thẳng đến đích.<br>Đơn hàng của bạn cất cánh trong vòng 10 phút.</p>
+
+                <div class="booking-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">15'</span>
+                        <span class="stat-label">Thời gian giao trung bình</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number">5kg</span>
+                        <span class="stat-label">Tải trọng tối đa</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">Hoạt động liên tục</span>
+                    </div>
+                </div>
+
+                <div class="booking-features">
+                    <div class="feature-tag"><i class="fa-solid fa-shield-halved"></i> An toàn tuyệt đối</div>
+                    <div class="feature-tag"><i class="fa-solid fa-satellite-dish"></i> Theo dõi thời gian thực</div>
+                    <div class="feature-tag"><i class="fa-solid fa-bolt"></i> Xử lý tức thì</div>
+                </div>
+            </div>
+
+            <!-- Right panel: form -->
+            <div class="booking-form-panel">
+                <div class="form-header">
+                    <span class="form-step-label">BƯỚC 01 — THÔNG TIN ĐƠN HÀNG</span>
+                </div>
+
+                <form id="orderForm" class="booking-form">
+                    <!-- Role toggle -->
+                    <div class="role-toggle-wrap">
+                        <span class="role-toggle-label">Bạn là:</span>
+                        <div class="role-toggle">
+                            <input type="radio" id="sender" name="userRole" value="sender" checked>
+                            <label for="sender"><i class="fa-solid fa-box-open"></i> Người gửi</label>
+                            <input type="radio" id="receiver" name="userRole" value="receiver">
+                            <label for="receiver"><i class="fa-solid fa-map-pin"></i> Người nhận</label>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <label for="userName"><i class="fa-regular fa-user"></i> Họ và tên</label>
+                            <input type="text" id="userName" placeholder="Nguyễn Văn A" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="userPhone"><i class="fa-solid fa-phone"></i> Số điện thoại</label>
+                            <input type="tel" id="userPhone" placeholder="0901 234 567" required>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="userEmail"><i class="fa-regular fa-envelope"></i> Email theo dõi đơn</label>
+                        <input type="email" id="userEmail" placeholder="example@vdrone.com" required>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <label for="address"><i class="fa-solid fa-location-dot"></i> Địa chỉ nhận/giao</label>
+                            <input type="text" id="address" placeholder="Tòa nhà, đường, quận..." required>
+                        </div>
+                        <div class="form-field">
+                            <label for="partnerName"><i class="fa-regular fa-id-card"></i> Họ tên đối tác</label>
+                            <input type="text" id="partnerName" placeholder="Tên người nhận/giao" required>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="itemType"><i class="fa-solid fa-cube"></i> Loại hàng hóa</label>
+                        <div class="select-wrap">
+                            <select id="itemType">
+                                <option value="electronics">⚡ Điện tử / Linh kiện</option>
+                                <option value="food">🍜 Thực phẩm / Đồ ăn</option>
+                                <option value="medical">💊 Vật tư y tế</option>
+                                <option value="documents">📄 Tài liệu / Giấy tờ</option>
+                                <option value="others">📦 Khác</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down select-arrow"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-field weight-field">
+                        <label><i class="fa-solid fa-weight-hanging"></i> Tải trọng: <strong id="weightVal">1 kg</strong></label>
+                        <div class="weight-slider-wrap">
+                            <input type="range" id="weightSlider" min="1" max="5" step="0.5" value="1">
+                            <div class="weight-track-labels">
+                                <span>1 kg</span><span>2 kg</span><span>3 kg</span><span>4 kg</span><span>5 kg</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="launch-btn">
+                        <span class="launch-btn-inner">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            Phóng Đơn Hàng
+                        </span>
+                        <span class="launch-btn-glow"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
     </section>
 
     <script>
@@ -344,14 +459,34 @@
             // Xử lý Mobile Menu
             const menuBtn = document.getElementById('menuToggle');
             const navContainer = document.querySelector('.nav-container');
-            menuBtn.addEventListener('click', () => {
-                navContainer.classList.toggle('active');
-            });
+            if (menuBtn) {
+                menuBtn.addEventListener('click', () => {
+                    navContainer.classList.toggle('active');
+                });
+            }
 
             // Đóng menu khi bấm vào link
             document.querySelectorAll('.nav-links a').forEach(link => {
                 link.addEventListener('click', () => navContainer.classList.remove('active'));
             });
+
+            // Xử lý Slider Tải trọng
+            const weightSlider = document.getElementById('weightSlider');
+            const weightVal = document.getElementById('weightVal');
+            if (weightSlider) {
+                weightSlider.addEventListener('input', (e) => {
+                    weightVal.innerText = e.target.value + " kg";
+                });
+            }
+
+            // Xử lý submit form (chặn load trang)
+            const orderForm = document.getElementById('orderForm');
+            if (orderForm) {
+                orderForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    alert('Cảm ơn bạn! Đơn hàng VDR-1 của bạn đang được xử lý.');
+                });
+            }
 
             function animate() {
                 requestAnimationFrame(animate);
