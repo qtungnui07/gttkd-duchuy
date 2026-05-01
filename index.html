@@ -72,15 +72,17 @@
 
             const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
             renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             container.appendChild(renderer.domElement);
 
             const controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.maxPolarAngle = Math.PI / 2 - 0.05; 
-            controls.enableZoom = true; // Bật tính năng zoom (phóng to/thu nhỏ)
-            controls.minDistance = 3; // Giới hạn zoom gần nhất
-            controls.maxDistance = 15; // Giới hạn zoom xa nhất
+            controls.enableZoom = true;
+            controls.minDistance = 3; 
+            controls.maxDistance = 15;
 
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             scene.add(ambientLight);
@@ -88,9 +90,18 @@
             const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
             dirLight.position.set(10, 20, 10);
             dirLight.castShadow = true;
+            dirLight.shadow.mapSize.width = 1024;
+            dirLight.shadow.mapSize.height = 1024;
             scene.add(dirLight);
 
-            // 3. Chế tạo VDR-1
+            const groundGeo = new THREE.PlaneGeometry(100, 100);
+            const groundMat = new THREE.ShadowMaterial({ opacity: 0.15 });
+            const ground = new THREE.Mesh(groundGeo, groundMat);
+            ground.rotation.x = -Math.PI / 2;
+            ground.position.y = -2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+
             const drone = new THREE.Group();
             scene.add(drone);
 
@@ -161,18 +172,17 @@
                 propellers.push(prop);
             }
 
-            // --- KHUNG GẦM (LANDING GEAR) ---
             // Thanh trượt ngang
             const skidGeo = new THREE.CylinderGeometry(0.08, 0.08, 4);
             const skid1 = new THREE.Mesh(skidGeo, darkMat);
             skid1.rotation.x = Math.PI / 2;
-            skid1.position.set(1.1, -1.8, 0);
+            skid1.position.set(1.1, -1.88, 0); 
             skid1.castShadow = true;
             drone.add(skid1);
 
             const skid2 = new THREE.Mesh(skidGeo, darkMat);
             skid2.rotation.x = Math.PI / 2;
-            skid2.position.set(-1.1, -1.8, 0);
+            skid2.position.set(-1.1, -1.88, 0);
             skid2.castShadow = true;
             drone.add(skid2);
 
@@ -186,10 +196,11 @@
                 leg.castShadow = true;
                 drone.add(leg);
             };
-            addLeg(0.9, 1.2, -0.2, 0);
-            addLeg(0.9, -1.2, -0.2, 0);
-            addLeg(-0.9, 1.2, 0.2, 0);
-            addLeg(-0.9, -1.2, 0.2, 0);
+            // Điều chỉnh rotZ: dương cho bên phải (x=0.9) và âm cho bên trái (x=-0.9) để nghiêng ra ngoài
+            addLeg(0.9, 1.2, 0.2, 0);
+            addLeg(0.9, -1.2, 0.2, 0);
+            addLeg(-0.9, 1.2, -0.2, 0);
+            addLeg(-0.9, -1.2, -0.2, 0);
 
             // --- HỘP HÀNG & TAY KẸP (PAYLOAD & GRIPPERS) ---
             // Hộp hàng
