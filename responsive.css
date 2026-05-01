@@ -2,42 +2,89 @@
 @media screen and (max-width: 768px) {
     /* Navbar Responsive */
     .navbar {
-        flex-direction: column;
-        padding: 10px 15px;
-        gap: 12px;
+        padding: 10px 20px;
     }
     
-    .logo {
-        font-size: 24px;
+    .mobile-only {
+        display: flex !important;
+    }
+
+    .nav-container {
+        position: fixed;
+        top: 70px; 
+        right: 15px;
+        width: auto;
+        min-width: 180px;
+        background-color: rgba(26, 26, 26, 0.92);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        z-index: 999;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        
+        /* Hiệu ứng Slide Down */
+        transform: translateY(-20px);
+        opacity: 0;
+        transition: transform 0.4s ease-out, opacity 0.3s ease-out;
+        pointer-events: none;
+        padding: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-container.active {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
     }
 
     .nav-links {
-        gap: 15px;
-        flex-wrap: wrap;
-        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 0;
     }
 
     .nav-links li a {
-        font-size: 14px;
+        padding: 10px 15px;
+        font-size: 15px;
+        text-align: center;
+        text-transform: uppercase;
+        display: block;
+        letter-spacing: 2px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-links li:last-child a {
+        border-bottom: none;
+    }
+
+    .nav-icon {
+        display: none !important;
     }
 
     /* Hero Text Responsive (Tiêu đề và mô tả) */
     .hero-text {
-        top: 15%; /* Đẩy lên cao để không che lấp Drone */
+        top: 15%; 
         left: 0;
         width: 100%;
+        transform: none; /* Reset lại transform từ desktop */
         text-align: center;
         padding: 0 20px;
         box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .hero-text h1 {
         font-size: 2.2rem;
+        gap: 6px;
+        justify-content: center;
     }
 
     .hero-text p {
-        font-size: 1rem;
+        font-size: 0.95rem;
         margin: 0 auto;
+        max-width: 100%;
     }
 
     /* Bảng điều khiển Drone */
@@ -46,6 +93,22 @@
         min-width: auto;
         padding: 15px 20px;
         margin-bottom: 25px;
+        position: relative;
+        top: auto;
+        right: auto;
+        transform: none;
+        animation: slideUpMobile 1s cubic-bezier(0.25, 1, 0.5, 1) 1.2s both;
+    }
+
+    @keyframes slideUpMobile {
+        from {
+            transform: translateY(100px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
     }
 
     #ui-panel h3 {

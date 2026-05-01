@@ -9,29 +9,45 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
     <header>
         <div class="navbar">
             <a href="#trang-chu" class="logo">VDRONE<span>.</span></a>
-            <ul class="nav-links">
-                <li><a href="#trang-chu">Trang chủ</a></li>
-                <li><a href="#ve-vdrone">Về VDrone</a></li>
-                <li><a href="#dich-vu">Dịch vụ</a></li>
-                <li><a href="#cong-nghe">Công nghệ</a></li>
-            </ul>
+            
+            <nav class="nav-container">
+                <ul class="nav-links">
+                    <li><a href="#trang-chu">Trang chủ</a></li>
+                    <li><a href="#ve-vdrone">Về VDrone</a></li>
+                    <li><a href="#dich-vu">Dịch vụ</a></li>
+                    <li><a href="#cong-nghe">Công nghệ</a></li>
+                </ul>
+            </nav>
+
+            <div class="nav-actions">
+                <button id="navThemeToggle" title="Đổi giao diện">
+                    <i class="fa-solid fa-moon moon-icon"></i>
+                    <i class="fa-solid fa-sun sun-icon" style="display:none;"></i>
+                </button>
+                <button id="menuToggle" class="mobile-only">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
         </div>
     </header>
 
     <section id="trang-chu">
+        <div id="theme-transition-overlay"></div>
         <div id="error-msg">Không thể tải 3D. Vui lòng kiểm tra trình duyệt.</div>
         
         <div id="canvas-container"></div>
         
         <div class="hero-text">
-            <h1>Tốc độ Không tưởng</h1>
-            <p>Giải pháp giao hàng chặng cuối bằng Drone tự động, tối ưu chi phí, vượt qua mọi ách tắc giao thông đô thị.</p>
+            <h1><span>Tốc</span><span>độ</span><span>không</span><span>tưởng</span></h1>
+            <p>Bỏ qua hoàn toàn mạng lưới giao thông đường bộ, VDR-1 bay theo đường thẳng tắp, không kẹt xe, không dừng đèn đỏ. Giúp rút ngắn thời gian giao hàng hỏa tốc từ 45 phút xuống dưới 15 phút.</p>
         </div>
 
         <div id="ui-panel">
@@ -41,6 +57,7 @@
                 <label>Tốc độ cánh quạt: <span id="speedVal">50%</span></label>
                 <input type="range" id="speedSlider" min="0.05" max="1" step="0.05" value="0.5">
             </div>
+            <!-- <button id="themeToggle">Chế độ Tối</button> -->
         </div>
     </section>
 
@@ -170,6 +187,23 @@
                 prop.castShadow = true;
                 drone.add(prop);
                 propellers.push(prop);
+
+                // --- ĐÈN LED TRÊN CÁNH TAY ---
+                const ledGeo = new THREE.SphereGeometry(0.05, 8, 8);
+                const ledColor = (i % 2 === 0) ? 0xff0000 : 0x00ff00; // Đỏ và Xanh lá xen kẽ
+                const ledMat = new THREE.MeshStandardMaterial({ color: ledColor, emissive: ledColor, emissiveIntensity: 0 });
+                const led = new THREE.Mesh(ledGeo, ledMat);
+                led.position.set(x, 0.1, z);
+                drone.add(led);
+
+                // Nguồn sáng cho LED (PointLight)
+                const pLight = new THREE.PointLight(ledColor, 0, 3);
+                pLight.position.set(x, 0.1, z);
+                drone.add(pLight);
+                
+                // Lưu lại để điều khiển cường độ
+                if (!drone.ledLights) drone.ledLights = [];
+                drone.ledLights.push({ mesh: led, light: pLight });
             }
 
             // Thanh trượt ngang
@@ -216,6 +250,11 @@
             mount.position.y = -0.4;
             drone.add(mount);
 
+            // Đèn gầm (Underglow)
+            const underLight = new THREE.PointLight(0x00aaff, 0, 5);
+            underLight.position.set(0, -1.5, 0);
+            drone.add(underLight);
+
             // 4 Tay kẹp hai bên hông hộp hàng
             const gripGeo = new THREE.BoxGeometry(0.1, 1.0, 0.2);
             const addGripper = (x, z) => {
@@ -259,8 +298,77 @@
                 speedVal.innerText = Math.round(currentSpeed * 100) + "%";
             });
 
+            // Biến điều khiển ánh sáng mượt mà
+            let targetAmbient = 0.6;
+            let targetDir = 0.9;
+            let targetGround = 0.15;
+            let targetGlow = 0; // Cường độ đèn LED/Glow
+
+            // Xử lý Dark Mode
+            const themeBtn = document.getElementById('themeToggle');
+            const navThemeBtn = document.getElementById('navThemeToggle');
+            const sunIcon = document.querySelector('.sun-icon');
+            const moonIcon = document.querySelector('.moon-icon');
+
+            const toggleTheme = () => {
+                const isDark = document.body.classList.toggle('dark-mode');
+                if (themeBtn) themeBtn.innerText = isDark ? "Chế độ Sáng" : "Chế độ Tối";
+                
+                // Cập nhật icon trong navbar
+                if (isDark) {
+                    sunIcon.style.display = 'inline-block';
+                    moonIcon.style.display = 'none';
+                } else {
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'inline-block';
+                }
+
+                // Đặt mục tiêu để lerp trong hàm animate
+                if (isDark) {
+                    targetAmbient = 0.15;
+                    targetDir = 0.3;
+                    targetGround = 0.4;
+                    targetGlow = 2;
+                } else {
+                    targetAmbient = 0.6;
+                    targetDir = 0.9;
+                    targetGround = 0.15;
+                    targetGlow = 0;
+                }
+            };
+
+            if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+            navThemeBtn.addEventListener('click', toggleTheme);
+
+            // Xử lý Mobile Menu
+            const menuBtn = document.getElementById('menuToggle');
+            const navContainer = document.querySelector('.nav-container');
+            menuBtn.addEventListener('click', () => {
+                navContainer.classList.toggle('active');
+            });
+
+            // Đóng menu khi bấm vào link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => navContainer.classList.remove('active'));
+            });
+
             function animate() {
                 requestAnimationFrame(animate);
+
+                // Lerp ánh sáng để mượt mà hơn
+                ambientLight.intensity += (targetAmbient - ambientLight.intensity) * 0.05;
+                dirLight.intensity += (targetDir - dirLight.intensity) * 0.05;
+                groundMat.opacity += (targetGround - groundMat.opacity) * 0.05;
+
+                // Cập nhật đèn LED và Underglow
+                underLight.intensity += (targetGlow - underLight.intensity) * 0.05;
+                if (drone.ledLights) {
+                    drone.ledLights.forEach(item => {
+                        item.light.intensity += (targetGlow * 0.5 - item.light.intensity) * 0.05;
+                        item.mesh.material.emissiveIntensity += (targetGlow - item.mesh.material.emissiveIntensity) * 0.05;
+                    });
+                }
+
                 if(isRunning) {
                     propellers.forEach((p, i) => p.rotation.y += (i % 2 === 0 ? currentSpeed : -currentSpeed));
                     hoverTime += 0.05;

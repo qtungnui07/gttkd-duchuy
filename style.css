@@ -2,14 +2,48 @@
 :root {
     --primary-color: #ffcc00; /* Vàng đặc trưng Vdrone */
     --dark-bg: #1a1a1a;
-    --text-light: #f4f6f9;
+    --light-bg: #f4f6f9;
+    --text-color: #111;
+    --text-muted: #444;
+    --panel-bg: rgba(255, 255, 255, 0.85);
+    --transition-speed: 0.8s;
 }
-body, html { 
+
+body.dark-mode {
+    --light-bg: #111;
+    --text-color: #f4f6f9;
+    --text-muted: #bbb;
+    --panel-bg: rgba(26, 26, 26, 0.9);
+}
+
+body { 
     margin: 0; 
     padding: 0; 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    background-color: var(--text-light);
-    scroll-behavior: smooth; /* Cuộn trang mượt mà */
+    background-color: var(--light-bg);
+    color: var(--text-color);
+    scroll-behavior: smooth;
+    transition: background-color var(--transition-speed);
+}
+
+/* Lớp phủ hiệu ứng chuyển cảnh Dark Mode */
+#theme-transition-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 2vmax;
+    height: 2vmax;
+    background: var(--dark-bg);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    z-index: -2;
+    pointer-events: none;
+    transition: transform 1.5s cubic-bezier(0.65, 0, 0.35, 1);
+    filter: blur(1px); /* Làm mềm cạnh vòng tròn */
+}
+
+body.dark-mode #theme-transition-overlay {
+    transform: translate(-50%, -50%) scale(150);
 }
 
 /* 1. THANH ĐIỀU HƯỚNG (NAVBAR) */
@@ -26,8 +60,8 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 50px;
-    max-width: 1200px;
+    padding: 10px 50px;
+    max-width: 1400px;
     margin: 0 auto;
 }
 .logo {
@@ -36,25 +70,76 @@ header {
     font-weight: 800;
     text-decoration: none;
     letter-spacing: 2px;
+    flex-shrink: 0;
 }
 .logo span { color: white; }
+
+.nav-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
 
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 30px;
+    gap: 40px;
     margin: 0;
     padding: 0;
 }
 .nav-links li a {
     color: white;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     transition: color 0.3s;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.nav-icon {
+    display: none; /* Ẩn icon trên desktop */
 }
 .nav-links li a:hover {
     color: var(--primary-color);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-shrink: 0;
+}
+
+#navThemeToggle, #menuToggle {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.3s, color 0.3s;
+}
+
+#navThemeToggle i, #menuToggle i {
+    font-size: 20px;
+    color: white;
+    line-height: 1;
+    display: block;
+}
+
+#navThemeToggle:hover, #menuToggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--primary-color);
+}
+
+.mobile-only {
+    display: none !important;
 }
 
 /* 2. CÁC SECTION CỦA TRANG */
@@ -67,8 +152,8 @@ section {
 /* Phần Trang chủ chứa 3D Drone */
 #trang-chu {
     position: relative;
-    padding: 0; /* Bỏ padding để 3D full màn hình */
-    background-color: #f0f2f5;
+    padding: 0; 
+    background-color: transparent; /* Để lộ lớp phủ phía sau */
     overflow: hidden;
     display: flex;
     align-items: flex-end;
@@ -83,19 +168,35 @@ section {
 }
 
 /* Bảng điều khiển Drone */
-#ui-panel { 
-    position: relative; 
-    margin-bottom: 40px;
-    background: rgba(255, 255, 255, 0.85); 
-    padding: 20px 30px; 
-    border-radius: 12px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
-    text-align: center; 
-    z-index: 10; 
-    min-width: 300px;
-    backdrop-filter: blur(8px);
+#ui-panel {
+    position: absolute;
+    bottom: auto;
+    top: 45%;
+    right: 5%;
+    transform: translateY(-50%);
+    background: var(--panel-bg);
+    padding: 30px;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    width: 320px;
+    z-index: 100;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    animation: slideLeft 1s cubic-bezier(0.25, 1, 0.5, 1) 1.2s both;
 }
-#ui-panel h3 { margin: 0 0 15px 0; color: #333; }
+
+@keyframes slideLeft {
+    from {
+        transform: translate(100px, -50%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(0, -50%);
+        opacity: 1;
+    }
+}
+#ui-panel h3 { margin: 0 0 15px 0; color: var(--text-color); }
 #ui-panel button { 
     background: var(--primary-color); 
     color: #000; border: none; padding: 12px 20px; font-size: 16px;
@@ -103,27 +204,87 @@ section {
 }
 #ui-panel button:hover { background: #e6b800; }
 .control-group { margin-top: 15px; text-align: left; }
-.control-group label { font-size: 14px; font-weight: 600; color: #555; display: block; margin-bottom: 8px;}
+.control-group label { font-size: 14px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px;}
+
+/* Nút chuyển đổi Theme */
+#themeToggle {
+    margin-top: 15px;
+    background: #444;
+    color: #fff;
+}
+body.dark-mode #themeToggle {
+    background: var(--primary-color);
+    color: #000;
+}
 input[type=range] { width: 100%; cursor: pointer; }
 
 /* Tiêu đề giới thiệu nổi trên 3D */
 .hero-text {
     position: absolute;
-    top: 25%;
-    left: 10%;
-    z-index: 10;
+    top: 45%;
+    left: 5%;
+    transform: translateY(-50%);
+    z-index: 100;
+    width: 35%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     pointer-events: none;
 }
 .hero-text h1 {
-    font-size: 3rem;
-    color: #111;
-    margin: 0 0 10px 0;
-    text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
+    font-size: 3.2rem;
+    color: var(--text-color);
+    margin: 0 0 15px 0;
+    text-shadow: 0 2px 15px rgba(255,255,255,0.2);
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    flex-wrap: wrap;
+    width: 100%;
 }
+
+.hero-text h1 span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(40px);
+    filter: blur(10px);
+    animation: wordSlideUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.hero-text h1 span:nth-child(1) { animation-delay: 0.1s; }
+.hero-text h1 span:nth-child(2) { animation-delay: 0.2s; }
+.hero-text h1 span:nth-child(3) { animation-delay: 0.35s; }
+.hero-text h1 span:nth-child(4) { animation-delay: 0.5s; }
+
 .hero-text p {
-    font-size: 1.2rem;
-    color: #444;
-    max-width: 500px;
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 100%;
+    text-align: left;
+    margin: 0;
+    line-height: 1.6;
+    animation: fadeInUp 1s ease 1s both;
+}
+
+/* Hoạt ảnh cho Hero Text */
+@keyframes wordSlideUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 /* Nội dung các phần khác */
@@ -132,12 +293,13 @@ input[type=range] { width: 100%; cursor: pointer; }
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: white;
+    background-color: var(--light-bg);
     text-align: center;
+    transition: background-color var(--transition-speed);
 }
-.content-section:nth-child(even) { background-color: #f9f9f9; }
-.content-section h2 { font-size: 2.5rem; color: var(--dark-bg); margin-bottom: 20px; }
-.content-section p { max-width: 800px; font-size: 1.1rem; line-height: 1.6; color: #666; }
+.content-section:nth-child(even) { background-color: var(--light-bg); opacity: 0.95; }
+.content-section h2 { font-size: 2.5rem; color: var(--text-color); margin-bottom: 20px; }
+.content-section p { max-width: 800px; font-size: 1.1rem; line-height: 1.6; color: var(--text-muted); }
 
 /* Báo lỗi 3D */
 #error-msg { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff3cd; padding: 20px; border-radius: 8px; font-weight: bold; z-index: 100; }
