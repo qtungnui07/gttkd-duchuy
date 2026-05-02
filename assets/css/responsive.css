@@ -61,30 +61,34 @@
         display: none !important;
     }
 
-    /* Hero Text Responsive (Tiêu đề và mô tả) */
+    /* Hero Text Responsive - Đẩy lên trên cùng để tránh che drone */
     .hero-text {
-        top: 15%; 
+        top: 8%;
         left: 0;
         width: 100%;
-        transform: none; /* Reset lại transform từ desktop */
+        transform: none;
         text-align: center;
         padding: 0 20px;
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
         align-items: center;
+        pointer-events: none;
+        z-index: 5;
     }
 
     .hero-text h1 {
-        font-size: 2.2rem;
-        gap: 6px;
+        font-size: 1.9rem;
+        gap: 4px;
         justify-content: center;
+        line-height: 1.2;
     }
 
     .hero-text p {
-        font-size: 0.95rem;
-        margin: 0 auto;
-        max-width: 100%;
+        font-size: 0.82rem;
+        margin: 6px auto 0;
+        max-width: 90%;
+
     }
 
     /* Bảng điều khiển Drone */

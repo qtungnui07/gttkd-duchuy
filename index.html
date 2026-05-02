@@ -67,6 +67,7 @@
                 <label>Tốc độ cánh quạt: <span id="speedVal">50%</span></label>
                 <input type="range" id="speedSlider" min="0.05" max="1" step="0.05" value="0.5">
             </div>
+            <button id="orbitBtn"><i class="fa-solid fa-hand"></i> Xoay Model</button>
             <!-- <button id="themeToggle">Chế độ Tối</button> -->
         </div>
     </section>
@@ -314,6 +315,14 @@
             controls.enableZoom = true;
             controls.minDistance = 3; 
             controls.maxDistance = 15;
+
+            // Tắt OrbitControls mặc định — dùng nút "Xoay Model" để bật
+            controls.enabled = false;
+
+            // Mobile: 2 ngón vẫn zoom được khi đang ở chế độ xoay
+            renderer.domElement.addEventListener('touchstart', (e) => {
+                if (e.touches.length >= 2 && controls.enabled) controls.enabled = true;
+            }, { passive: true });
 
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             scene.add(ambientLight);
@@ -567,6 +576,28 @@
             document.querySelectorAll('.nav-links a').forEach(link => {
                 link.addEventListener('click', () => navContainer.classList.remove('active'));
             });
+
+            // Nút bật/tắt OrbitControls
+            const orbitBtn = document.getElementById('orbitBtn');
+            let orbitActive = false;
+            if (orbitBtn) {
+                const setOrbit = (active) => {
+                    orbitActive = active;
+                    controls.enabled = active;
+                    if (active) {
+                        orbitBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Tắt Xoay';
+                        orbitBtn.style.background = '#e74c3c';
+                        orbitBtn.style.color = '#fff';
+                        orbitBtn.style.borderColor = '#e74c3c';
+                    } else {
+                        orbitBtn.innerHTML = '<i class="fa-solid fa-hand"></i> Xoay Model';
+                        orbitBtn.style.background = '';
+                        orbitBtn.style.color = '';
+                        orbitBtn.style.borderColor = '';
+                    }
+                };
+                orbitBtn.addEventListener('click', () => setOrbit(!orbitActive));
+            }
 
             // Xử lý Slider Tải trọng
             const weightSlider = document.getElementById('weightSlider');
