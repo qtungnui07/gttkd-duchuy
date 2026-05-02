@@ -122,16 +122,36 @@
 
     /* Nội dung các section khác */
     .content-section {
-        padding: 60px 15px 20px;
+        padding: 80px 20px;
     }
 
-    .content-section h2 {
-        font-size: 2rem;
+    .section-title {
+        font-size: 2.2rem;
+        margin-bottom: 40px;
     }
 
-    .content-section p {
-        font-size: 1rem;
-        padding: 0 10px;
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .service-item {
+        flex-direction: column;
+        gap: 20px;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .service-content {
+        text-align: center;
+    }
+
+    .tech-main-card {
+        padding: 30px;
+    }
+
+    .tech-features {
+        grid-template-columns: 1fr;
+        gap: 30px;
     }
     /* Form Đặt Lịch Responsive */
     .booking-wrapper {
