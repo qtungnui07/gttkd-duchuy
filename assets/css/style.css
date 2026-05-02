@@ -176,6 +176,19 @@ section {
     height: 100%;
 }
 
+#error-msg {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    z-index: 1001;
+    font-weight: 600;
+}
+
 /* Bảng điều khiển Drone */
 #ui-panel {
     position: absolute;
@@ -242,15 +255,18 @@ input[type=range] { width: 100%; cursor: pointer; }
     pointer-events: none;
 }
 .hero-text h1 {
-    font-size: 3.2rem;
+    font-size: 3.8rem;
+    font-weight: 900;
     color: var(--text-color);
-    margin: 0 0 15px 0;
-    text-shadow: 0 2px 15px rgba(255,255,255,0.2);
-    display: flex;
-    justify-content: flex-start;
-    gap: 8px;
-    flex-wrap: wrap;
+    margin: 0 0 20px 0;
+    text-shadow: 0 2px 15px rgba(255,255,255,0.1);
+    line-height: 1.1;
     width: 100%;
+}
+
+.hero-text h1 .highlight {
+    color: var(--primary-color);
+    display: inline-block;
 }
 
 .hero-text h1 span {
