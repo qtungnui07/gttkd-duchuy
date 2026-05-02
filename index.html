@@ -12,6 +12,11 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -85,7 +90,7 @@
             <div class="booking-info">
                 <div class="booking-badge">✦ VDR-1 DISPATCH</div>
                 <h2 class="booking-headline">Đặt Lịch<br><span>Giao Hàng</span></h2>
-                <p class="booking-desc">Bỏ qua kẹt xe. Bay thẳng đến đích.<br>Đơn hàng của bạn cất cánh trong vòng 10 phút.</p>
+                <p class="booking-desc">Bỏ qua kẹt xe, giao thẳng đến đích.<br>Đơn hàng của bạn cất cánh trong vòng 10 phút.</p>
 
                 <div class="booking-stats">
                     <div class="stat-item">
@@ -114,7 +119,7 @@
             <!-- Right panel: form -->
             <div class="booking-form-panel">
                 <div class="form-header">
-                    <span class="form-step-label">BƯỚC 01 — THÔNG TIN ĐƠN HÀNG</span>
+                    <span class="form-step-label">THÔNG TIN ĐƠN HÀNG</span>
                 </div>
 
                 <form id="orderForm" class="booking-form">
@@ -473,9 +478,20 @@
             // Xử lý Slider Tải trọng
             const weightSlider = document.getElementById('weightSlider');
             const weightVal = document.getElementById('weightVal');
+
+            function updateSliderFill(slider) {
+                const min = parseFloat(slider.min) || 0;
+                const max = parseFloat(slider.max) || 100;
+                const val = parseFloat(slider.value);
+                const pct = ((val - min) / (max - min)) * 100;
+                slider.style.background = `linear-gradient(to right, #ffcc00 0%, #ffcc00 ${pct}%, var(--booking-slider-track) ${pct}%, var(--booking-slider-track) 100%)`;
+            }
+
             if (weightSlider) {
+                updateSliderFill(weightSlider); // set on load
                 weightSlider.addEventListener('input', (e) => {
                     weightVal.innerText = e.target.value + " kg";
+                    updateSliderFill(e.target);
                 });
             }
 
